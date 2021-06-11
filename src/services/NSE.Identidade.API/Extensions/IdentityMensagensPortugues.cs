@@ -32,12 +32,21 @@ namespace NSE.Identidade.API.Extensions
 
         public override IdentityError UserLockoutNotEnabled() { return new IdentityError { Code = nameof(UserLockoutNotEnabled), Description = "O lockout não está habilitado para este usuário." }; }
 
-        public override IdentityError UserAlreadyInRole(string role) { return new IdentityError {Code = nameof(UserAlreadyInRole), Description = $"O usuario já possui a permissão '{role}' " }; }
+        public override IdentityError UserAlreadyInRole(string role) { return new IdentityError {Code = nameof(UserAlreadyInRole), Description = $"O usuario já possui a permissão '{role}'." }; }
 
-        public override IdentityError UserNotInRole(string role) { return new IdentityError { Code = nameof(UserNotInRole), Description = $"O usuário não tem a permissão '{role}' " }; }
+        public override IdentityError UserNotInRole(string role) { return new IdentityError { Code = nameof(UserNotInRole), Description = $"O usuário não tem a permissão '{role}'." }; }
 
         public override IdentityError PasswordTooShort(int length) { return new IdentityError { Code = nameof(PasswordTooShort), Description = $"A senha deve conter ao menos '{length}' caracteres." }; }
+
+        public override IdentityError PasswordRequiresNonAlphanumeric() { return new IdentityError { Code = nameof(PasswordRequiresNonAlphanumeric), Description = "As senhas devem conter ao menos um caracters não alfanumérico." }; }//**
+
+        public override IdentityError PasswordRequiresDigit() { return new IdentityError { Code = nameof(PasswordRequiresDigit), Description = "As senhas devem conter ao menos um digito ('0'-'9')." }; }
+
+        public override IdentityError PasswordRequiresLower() { return new IdentityError { Code = nameof(PasswordRequiresLower), Description = "As senhas devem conter ao menos um caracter em caixa baixa ('a'-'z')." }; }//**
+
+        public override IdentityError PasswordRequiresUpper() { return new IdentityError { Code = nameof(PasswordRequiresUpper), Description = "As senhas devem conter ao menos um caracter em caixa alta ('A'-'Z')." }; } //**
         
+
 
 
 

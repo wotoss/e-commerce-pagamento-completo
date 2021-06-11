@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src",
+    "\\src\\services",
+    "\\src\\services\\NSE.Identidade.API",
+    "\\src\\services\\NSE.Identidade.API\\Extensions"
   ],
-  "SelectedNode": "\\src",
+  "SelectedNode": "\\src\\services\\NSE.Identidade.API\\Startup.cs",
   "PreviewInSolutionExplorer": false
 }
