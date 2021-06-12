@@ -69,3 +69,12 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+/* ESTA É UMA CONFIGURAÇÃO QUE EU COLOQUEI  PARA TODOS OS (INPUT OU IO, SELETOR = SELECT, ARQUIVOS = FILE, TEXTAREA)*/
+/*UM TAMANHO MAXIMO 400px,*/
+input,
+select,
+file,
+textarea{
+    max-width: 400px;
+}

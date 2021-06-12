@@ -1,0 +1,28 @@
+﻿
+<!--ISTO É UMA LOGIN PARTIAL-->
+<ul class="navbar-nav">
+    <!--Se eu tenho um usuario autenticado atraves de um cookie-->
+    @if (Context.User.Identity.IsAuthenticated)
+    {
+        <!--Ele dá esta mensagem é permite entrar no sistema-->
+        <li class="nav-item">
+            <a class="nav-link text-dark" title="Manage">Olá Usuario</a>
+        </li>
+        <!--Aqui caso precise sair do loja.-->
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Identidade" asp-action="Logout">Sair</a>
+        </li>
+    }
+    else
+    {
+        <!--Caso não esteja autenticado ele sugeri que crie o login -->
+        <li class="nav-item" style="padding-right: 30px;">
+            <a class="btn btn-primary" asp-controller="Identidade" asp-action="Registro">Crie sua conta</a>
+        </li>
+
+        <li class="nav"-item>
+            <a class="btn btn-primary" asp-controller="Identidade" asp-action="Login">Login</a>
+        </li>
+
+    }
+</ul>
