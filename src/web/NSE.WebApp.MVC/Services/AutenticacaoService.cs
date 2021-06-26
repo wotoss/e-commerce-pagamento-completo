@@ -1,8 +1,9 @@
 ﻿
+using Microsoft.Extensions.Options;
+using NSE.WebApp.MVC.Extensions;
 using NSE.WebApp.MVC.Models;
+using System;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace NSE.WebApp.MVC.Services
@@ -13,76 +14,64 @@ namespace NSE.WebApp.MVC.Services
         //biblioteca (HttpClient) de comunicação WEB com a API => Fazendo isto eu posso conversar fazer request e receber response.
         private readonly HttpClient _httpClient;
 
+        
+
         //Inicializo o (HttpClient) pelo construtor 
-        public AutenticacaoService(HttpClient httpClient)
+        public AutenticacaoService(HttpClient httpClient, IOptions<AppSettings> settings)
         {
+            //Veja vou setar no meu construtor o enderecoBase = BaseAddress
+            //desta forma toda vez que eu api/identidade/autenticar ele já completa com  _settings.AutenticacaoUrl/api/identidade/autenticar 
+            httpClient.BaseAddress = new Uri(settings.Value.AutenticacaoUrl);
+
             _httpClient = httpClient;
+            
         }
         //APENAS COMO LEMBRETE: ESTE (UsuarioRespostaLogin). Trás o retorno do (token) => foi contruida uma classe para isto
         public async Task<UsuarioRespostaLogin> Login(UsuarioLogin usuarioLogin)
         {
-            //aqui no meu login vou fazer uma chamada para o mundo externo.
-            //o meu content ou (loginContent) é um conteudo que será enviado então precisa ser (Serializado)
-            var loginContent = new StringContent( //esta instância (new StringContent) vai me retornar um dado no formato String
-                JsonSerializer.Serialize(usuarioLogin), //eu vou serializar no formato Json (então uso JsonSerializer). Estou serializando o (usuarioLogin)
-                Encoding.UTF8,
-                "application/json"); //Encoding.UTF8 é o formato. Já o (application/json) é o meu (header ou cabeçalho = do json que estou passando)
+            //Entrar (f12) dentro do método ObterConteudo para entender toda a construção deste método
+            var loginContent = ObterConteudo(usuarioLogin);
 
-            //Nosso login vai fazer um post nesta url passando este conteudo (loginContent)
-            //Simplificando esta url vai receber o meu conteudo (loginContent) - via (POST).44396
-            var response = await _httpClient.PostAsync("https://localhost:44330/api/identidade/autenticar", loginContent);
-
-            //var teste = await response.Content.ReadAsStringAsync(); //"PEGUEI RESPONSE E FIZ UM TESTE"
-
-            //Usando o (PropertyNameCaseInsensitive) eu estou dizendo. Desconsidere maiusculo e minusculo..Neste caso tudo passa a ser igual (A ou a)
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-
+            //Nosso login vai fazer um post nesta url passando este conteudo (loginContent)44308
+            //Simplificando esta url vai receber o meu conteudo (loginContent) - via (POST).44396, 44330
+            //OLHA DESTA FORMA EU PASSO PELA MINHA (CLASSE AppSettings) E PEGAR O VALOR DENTRO DO MEU (ARQUIVO appSettings.Development.json || appsettings)
+            var response = await _httpClient.PostAsync("api/identidade/autenticar", loginContent);
 
             if (!TratarErrosResponse(response))
             {
                 return new UsuarioRespostaLogin
                 {
-                    //vou retornar o resultado do (UsuarioRespostaLogin)
-                    ResponseResult = JsonSerializer.Deserialize<ResponseResult>(await response.Content.ReadAsStringAsync(), options)
+                    //É importante entrar (f12) no método  DeserializarObjetoResponse para ver como foi implementado.
+                   ResponseResult = await DeserializarObjetoResponse<ResponseResult>(response)
                 };
             }
-
-            //Ele vem como um objeto com muita informação. Então vamos deserializar 
-            //Passo o meu Deserialize<Com um formato que eu escolher neste caso <string>
-            //Este (response.Content) que é meu cotrudo eu passo o formato => (ReadAsStringAsync =>para string)
-            return JsonSerializer.Deserialize<UsuarioRespostaLogin>(await response.Content.ReadAsStringAsync(), options);
+            //É importante entrar (f12) no método  DeserializarObjetoResponse para ver como foi implementado.
+            return await DeserializarObjetoResponse<UsuarioRespostaLogin>(response);
         }
         //APENAS COMO LEMBRETE: ESTE (UsuarioRespostaLogin). Trás o retorno do (token) => foi contruida uma classe para isto
         //Este método (Registro) é igual ao de (Login) que já esta comentado para entendimento.
         public async Task<UsuarioRespostaLogin> Registro(UsuarioRegistro usuarioRegistro)
         {
-            var registroContent = new StringContent(
-                JsonSerializer.Serialize(usuarioRegistro),
-                Encoding.UTF8,
-                "application/json");
 
-            var response = await _httpClient.PostAsync("https://localhost:44308/api/identidade/nova-conta", registroContent);
+            //Entrar (f12) dentro do método ObterConteudo para entender toda a construção deste método
+            var registroContent = ObterConteudo(usuarioRegistro);
 
-            //Usando o (PropertyNameCaseInsensitive) eu estou dizendo. Desconsidere maiusculo e minusculo..Neste caso tudo passa a ser igual (A ou a)
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
+            //1 = endpoints endereço {_settings.AutenticacaoUrl} a parte do servidor. (esta parte dinâmica pode ser mudada na hospedagem ou em algu momento)
+            //2 = endpoinst endereço /api/identidade/nova-conta" a parte de nossa api. (Do nosso Sistema)
+            var response = await _httpClient.PostAsync("/api/identidade/nova-conta", registroContent);
 
 
             if (!TratarErrosResponse(response))
             {
                 return new UsuarioRespostaLogin
                 {
-                    //vou retornar o resultado do (UsuarioRespostaLogin)
-                    ResponseResult = JsonSerializer.Deserialize<ResponseResult>(await response.Content.ReadAsStringAsync(), options)
+                    //É importante entrar (f12) no método  DeserializarObjetoResponse para ver como foi implementado.
+                    ResponseResult = await DeserializarObjetoResponse<ResponseResult>(response)
                 };
             }
 
-            return JsonSerializer.Deserialize<UsuarioRespostaLogin>(await response.Content.ReadAsStringAsync(), options);
+            return await DeserializarObjetoResponse<UsuarioRespostaLogin>(response);
+
         }
     }
 }

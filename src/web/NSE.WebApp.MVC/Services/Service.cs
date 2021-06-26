@@ -1,13 +1,47 @@
 ﻿using NSE.WebApp.MVC.Extensions;
 
 using System.Net.Http;
-
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace NSE.WebApp.MVC.Services
 {
     //Classe abstrata ela só pode ser herdade e não instânciada 
     public abstract  class Service
     {
+        //estou passando como paramentro um objeto dado = (object dado)
+        protected StringContent ObterConteudo(object dado)
+        {
+            //aqui no meu login vou fazer uma chamada para o mundo externo.
+            //o meu content ou (loginContent) é um conteudo que será enviado então precisa ser (Serializado)
+            return new StringContent( //esta instância (new StringContent) vai me retornar um dado no formato String
+                JsonSerializer.Serialize(dado), //eu vou serializar no formato Json (então uso JsonSerializer). Estou serializando o (usuarioLogin)
+                Encoding.UTF8,
+                "application/json"); //Encoding.UTF8 é o formato. Já o (application/json) é o meu (header ou cabeçalho = do json que estou passando)
+        }
+
+        //Vamos fazer um método generico quem herdar a classe service, lembrando ela só pode ser herdada pois é abstrata.
+        //Então quem herdar a (classe service) herda os métodos.
+        protected async Task<T> DeserializarObjetoResponse<T>(HttpResponseMessage responseMessage)
+        {
+            //Usando o (PropertyNameCaseInsensitive) eu estou dizendo. Desconsidere maiusculo e minusculo..Neste caso tudo passa a ser igual (A ou a)
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            //Ele vem como um objeto com muita informação. Então vamos deserializar 
+            //Passo o meu Deserialize<Com um formato que eu escolher neste caso <string>
+            //Este (response.Content) que é meu cotrudo eu passo o formato => (ReadAsStringAsync =>para string)
+            return JsonSerializer.Deserialize<T>(await responseMessage.Content.ReadAsStringAsync(), options);
+
+        }
+
+
+
+
+
         protected bool TratarErrosResponse (HttpResponseMessage response)
         {
             //O StatusCode me diz qual foi o tipo de erro que aconteceu se foi um 500, 404 ...

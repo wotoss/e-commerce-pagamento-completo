@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static NSE.Identidade.API.Models.UserViewModels;
+
 using NSE.Identidade.API.Extensions;
 using Microsoft.Extensions.Options;
 using System.Text;
@@ -37,7 +38,7 @@ namespace NSE.Identidade.API.Controllers
         public async Task<ActionResult> Registrar(UsuarioRegistro usuarioRegistro)
         {
 
-            return new StatusCodeResult(500);
+            ///return new StatusCodeResult(500);
 
             if (!ModelState.IsValid) return CustomResponse();
 
