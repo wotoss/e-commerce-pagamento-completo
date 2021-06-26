@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static NSE.Identidade.API.Models.UserViewModels;
-//using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 using NSE.Identidade.API.Extensions;
 using Microsoft.Extensions.Options;
 using System.Text;
@@ -37,6 +36,9 @@ namespace NSE.Identidade.API.Controllers
         [HttpPost("nova-conta")]
         public async Task<ActionResult> Registrar(UsuarioRegistro usuarioRegistro)
         {
+
+            return new StatusCodeResult(500);
+
             if (!ModelState.IsValid) return CustomResponse();
 
             //vou criar uma instância de IdentityUser
@@ -69,8 +71,9 @@ namespace NSE.Identidade.API.Controllers
         [HttpPost("autenticar")] //seria o login
         public async Task<ActionResult> Login(UsuarioLogin usuarioLogin)
         {
+
             //vamos validar se a Model State veio correta
-            if (!ModelState.IsValid) return CustomResponse();
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             //1- result ou usuario (tentando logar)
             var result = await _signInManager.PasswordSignInAsync(usuarioLogin.Email, usuarioLogin.Senha,
@@ -79,7 +82,7 @@ namespace NSE.Identidade.API.Controllers
             //2- se deu certo e vamos gerar o token atraves deste método (GerarJwt)
             if (result.Succeeded)
             {
-                return Ok(await GerarJwt(usuarioLogin.Email));
+                return CustomResponse(await GerarJwt(usuarioLogin.Email));
             }
 
             //3 -foi bloqueado por 5 tentativas invalidas. Este é um erro enviado pelo identity

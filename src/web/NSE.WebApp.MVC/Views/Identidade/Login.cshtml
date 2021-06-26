@@ -9,9 +9,13 @@
 <div class="row">
     <div class="col-md-12">
         <section>
-            <form method="post">
+            <!--desta forma ele guarda a informação de onde eu estava vindo (asp-route-returnurl=")-->
+            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                 <h4>Seja bem vindo e boas compras.</h4>
                 <hr />
+                <!--Lembrando que para usar o ViewCompanhi eu configurei um tagHalper na (_ViewImports.cshtml)-->
+                <!--View Componente Summary vc-->
+                <vc:summary></vc:summary>
 
                 <!--input email-->
                 <div class="form-group">

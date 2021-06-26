@@ -1,12 +1,14 @@
-﻿
+﻿<!--vou injetar o meu (IUser ou Dados do Usuario)-->
+@using NSE.WebApp.MVC.Extensions
+@inject IUser AppUser
 <!--ISTO É UMA LOGIN PARTIAL-->
 <ul class="navbar-nav">
     <!--Se eu tenho um usuario autenticado atraves de um cookie-->
-    @if (Context.User.Identity.IsAuthenticated)
+    @if (AppUser.EstaAutenticado())
     {
         <!--Ele dá esta mensagem é permite entrar no sistema-->
         <li class="nav-item">
-            <a class="nav-link text-dark" title="Manage">Olá Usuario</a>
+            <a class="nav-link text-dark" title="Manage">Olá @AppUser.ObterUserEmail()</a>
         </li>
         <!--Aqui caso precise sair do loja.-->
         <li class="nav-item">

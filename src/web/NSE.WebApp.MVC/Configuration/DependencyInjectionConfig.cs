@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using NSE.WebApp.MVC.Extensions;
 using NSE.WebApp.MVC.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace NSE.WebApp.MVC.Configuration
 {
@@ -14,6 +13,12 @@ namespace NSE.WebApp.MVC.Configuration
         {
             //estou adicionando um serviço http e (NÂO um scoped - singleton -transient) - "Mas poderia"
             services.AddHttpClient<IAutenticacaoService, AutenticacaoService>();
+
+            //recomendação da microsoft que use (AddSingleton)
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            //vou usar (AddScoped) que ai os dados do usuario(IUser) o qual estou tentando obter fica mais limitado ao request
+            services.AddScoped<IUser, AspNetUser>();
         }
     }
 }
