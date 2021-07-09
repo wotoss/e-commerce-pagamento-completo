@@ -14,4 +14,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.11" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\fonts\fontawesome\webfonts\" />
+    <Folder Include="wwwroot\images\avatars\" />
+    <Folder Include="wwwroot\images\banners\" />
+    <Folder Include="wwwroot\images\icons\" />
+    <Folder Include="wwwroot\images\misc\" />
+    <Folder Include="wwwroot\images\produtos\" />
+  </ItemGroup>
+
 </Project>
