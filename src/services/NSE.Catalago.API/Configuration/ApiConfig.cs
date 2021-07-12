@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NSE.Catalago.API.Data;
+using NSE.WebAPI.Core.Identidade;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,6 +48,8 @@ namespace NSE.Catalago.API.Configuration
             app.UseHttpsRedirection();
             app.UseRouting(); //Roteamento
             app.UseCors("Total"); //Uso do Cors que foi criado os acessos "TOTAL"
+
+            app.UseAuthConfiguration();
 
             //Aqui temos os mapeamentos dos nossos endpoints
             app.UseEndpoints(endpoints =>

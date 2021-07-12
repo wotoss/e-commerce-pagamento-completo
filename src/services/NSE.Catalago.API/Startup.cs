@@ -15,6 +15,7 @@ using NSE.Catalago.API.Configuration;
 using NSE.Catalago.API.Data;
 using NSE.Catalago.API.Data.Repository;
 using NSE.Catalago.API.Models;
+using NSE.WebAPI.Core.Identidade;
 
 namespace NSE.Catalago.API
 {
@@ -44,7 +45,11 @@ namespace NSE.Catalago.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApiConfiguration(Configuration);
+
+            services.AddJwtConfiguration(Configuration);
+
             services.AddSwaggerConfiguration();
+
             services.RegisterServices();
         }
 

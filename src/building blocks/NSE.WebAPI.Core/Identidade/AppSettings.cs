@@ -1,6 +1,6 @@
 ﻿
 
-namespace NSE.Identidade.API.Extensions
+namespace NSE.WebAPI.Core.Identidade
 {
     //Aqui nos vamos definir o que vamos guardar lá no arquivo appsettings.json
     public class AppSettings
