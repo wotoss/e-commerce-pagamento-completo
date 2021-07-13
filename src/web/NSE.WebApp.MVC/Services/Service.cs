@@ -38,10 +38,6 @@ namespace NSE.WebApp.MVC.Services
 
         }
 
-
-
-
-
         protected bool TratarErrosResponse (HttpResponseMessage response)
         {
             //O StatusCode me diz qual foi o tipo de erro que aconteceu se foi um 500, 404 ...

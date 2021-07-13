@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NSE.WebApp.MVC.Extensions;
 using NSE.WebApp.MVC.Services;
-
+using NSE.WebApp.MVC.Services.Handlers;
 
 namespace NSE.WebApp.MVC.Configuration
 {
@@ -11,8 +11,13 @@ namespace NSE.WebApp.MVC.Configuration
         //Neste (RegisterServices) eu vou Registrar as minhas dependencias
         public static void RegisterServices(this IServiceCollection services)
         {
+            services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
+
             //estou adicionando um serviço http e (NÂO um scoped - singleton -transient) - "Mas poderia"
             services.AddHttpClient<IAutenticacaoService, AutenticacaoService>();
+
+            services.AddHttpClient<ICatalogoService, CatalogoService>()
+                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
             //recomendação da microsoft que use (AddSingleton)
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

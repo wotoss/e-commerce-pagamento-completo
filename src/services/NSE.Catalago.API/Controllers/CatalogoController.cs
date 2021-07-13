@@ -23,7 +23,7 @@ namespace NSE.Catalago.API.Controllers
         //Eu vou deixar que ele leia os meus produtos
         [AllowAnonymous]
         //Aqui eu vou retornar todos os meus produtos
-        [HttpGet("catologo/produtos")]
+        [HttpGet("catalogo/produtos")]
         public async Task<IEnumerable<Produto>> Index()
         {
             return await _produtoRepository.ObterTodos();

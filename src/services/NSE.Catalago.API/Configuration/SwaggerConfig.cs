@@ -22,6 +22,7 @@ namespace NSE.Catalago.API.Configuration
                     License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/license/MIT") }
                 });
 
+                //INICIO - RECEBENDO O TOKEM COM AS CLAIMS
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                    Description = "Insira o token JWT desta maneira: Bearer {seu token}",
@@ -47,7 +48,7 @@ namespace NSE.Catalago.API.Configuration
 
             });
         }
-        
+        //FIM - RECEBENDO O TOKEM COM AS CLAIMS
         public static void UseSwaggerConfiguration(this IApplicationBuilder app)
         {
             app.UseSwagger();

@@ -1,19 +1,11 @@
 ﻿
-
-<!--EU CRIEI LÁ NA (NAMESPACE NSE.WebApp.MVC.Extensions) a CLASSE (SummaryViewComponent) E DE LÁ QUE VEM O RETURN -->
-
-<!--Se dentro da nossa ViewData (dados) na ModelState o numero de erro for maior doque 0 (> 0) -->
-<!--Eu exibo ou mostro a (div - vermelha na tela )-->
 @if (ViewData.ModelState.ErrorCount > 0)
 {
     <div style="padding-top: 15px;"></div>
 
-    <!--NESTE CASO EU FIZ UM DIV VERMELHA-->
     <div class="alert alert-danger">
-        <button type="button" class="close" data-dismiss="alert">x</button>
-        <!--Aqui temos uma mensagem que algo deu errado -->
+        <button type="button" class="close" data-dismiss="alert">×</button>
         <h3 id="msgRetorno" style="padding-top: 20px">Opa! Algo deu errado :(</h3>
-        <!--Aqui nos temos o recurso do aspnet validation summary = para mostrar os erros que acontecram-->
         <div style="padding-top: 20px" asp-validation-summary="ModelOnly" class="text-danger"></div>
     </div>
 }
