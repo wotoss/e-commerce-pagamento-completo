@@ -38,6 +38,9 @@ namespace NSE.Catalago.API.Controllers
         [HttpGet("catalogo/produtos/{id}")]
         public async Task<Produto> ProdutoDetalhe(Guid id)
         {
+
+            //erro especializado
+            //throw new Exception("Erro!");
             return await _produtoRepository.ObterPorId(id);
         }
 

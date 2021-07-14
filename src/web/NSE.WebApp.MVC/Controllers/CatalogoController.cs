@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NSE.WebApp.MVC.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace NSE.WebApp.MVC.Controllers
 {
-    public class CatalogoController : MainController
+    public class CatalogoController : MainController//ICatalogoServiceRefit
     {
-        private readonly ICatalogoService _catalogoService;
+        ////private readonly ICatalogoService _catalogoService;
+        //Fazendo teste com Refit
+        private readonly ICatalogoServiceRefit _catalogoService;
 
-        public CatalogoController(ICatalogoService catalogoService)
+        public CatalogoController(/*ICatalogoService catalogoService,*/ ICatalogoServiceRefit catalogoService)
         {
             _catalogoService = catalogoService;
         }
