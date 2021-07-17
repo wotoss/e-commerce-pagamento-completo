@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NSE.WebApp.MVC.Extensions;
+using System.Globalization;
 
 namespace NSE.WebApp.MVC.Configuration
 {
@@ -57,6 +59,19 @@ namespace NSE.WebApp.MVC.Configuration
 
             //Eu trouce da (ClassIdentityConfig) do MVC
             app.UseIdentityConfiguration();
+
+            //Configuração de Culturas de Moedas suportadas.
+            //Que todas as minhas culturas será portugues Brasil
+            var supportedCultures = new[] { new CultureInfo("pt-BR") };
+            //vou usar o recurso de localização(UseRequestLocalization) para que minha cultura se personalize do jeito que eu quero
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                //aqui a cultura padrão é (pt-BR)
+                DefaultRequestCulture = new RequestCulture("pt-BR"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            }) ; 
+
 
             // Estou registrando o meu Middleware no sistem  e Com o Middleware todo o resquest passará por ele 
             // Estou centralizando os erros do sitema no tratamento do meu Middleware = Isto significa que não preciso 

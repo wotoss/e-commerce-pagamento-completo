@@ -7,11 +7,11 @@ namespace NSE.WebApp.MVC.Controllers
 {
     public class CatalogoController : MainController//ICatalogoServiceRefit
     {
-        ////private readonly ICatalogoService _catalogoService;
+        private readonly ICatalogoService _catalogoService;
         //Fazendo teste com Refit
-        private readonly ICatalogoServiceRefit _catalogoService;
+        //private readonly ICatalogoServiceRefit _catalogoService;
 
-        public CatalogoController(/*ICatalogoService catalogoService,*/ ICatalogoServiceRefit catalogoService)
+        public CatalogoController(ICatalogoService catalogoService /*ICatalogoServiceRefit catalogoService*/)
         {
             _catalogoService = catalogoService;
         }

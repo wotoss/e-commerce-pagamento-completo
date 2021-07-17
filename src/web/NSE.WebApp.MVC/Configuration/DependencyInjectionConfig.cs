@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSE.WebApp.MVC.Extensions;
 using NSE.WebApp.MVC.Services;
 using NSE.WebApp.MVC.Services.Handlers;
+using Polly;
 using System;
 
 namespace NSE.WebApp.MVC.Configuration
@@ -18,18 +19,23 @@ namespace NSE.WebApp.MVC.Configuration
             //estou adicionando um serviço http e (NÂO um scoped - singleton -transient) - "Mas poderia"
             services.AddHttpClient<IAutenticacaoService, AutenticacaoService>();
 
-            //neste momento eu vou comentar porque vou utilizar o Refit
-            //services.AddHttpClient<ICatalogoService, CatalogoService>()
-            //    .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+            //Caso eu use o Refit abaixo ai eu comento este. Apenas por minha decisão eu uso este no projeto
+            services.AddHttpClient<ICatalogoService, CatalogoService>()
+                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+                //estou dizendo que tipo de (politica || polly) vou adotar par o (erro http). Neste caso seria o (WaitAndRetryAsync)
+                //.AddTransientHttpErrorPolicy(
+                //que seria 3vezes. quanto tempo vamos esperar para chamar a proxima seria 600 milessegundos.
+               // p => p.WaitAndRetryAsync(3, _=> TimeSpan.FromMilliseconds(600)));
 
 
-            //montando o refit aqui ai não preciso usar a (Service)
-            services.AddHttpClient("Refit", options =>
-            {
-                options.BaseAddress = new Uri(configuration.GetSection("CatalogoUrl").Value);
-            })
-            .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
-            .AddTypedClient(Refit.RestService.For<ICatalogoServiceRefit>);
+            //montando o REFIT aqui ai não preciso usar a (Service)
+
+            //services.AddHttpClient("Refit", options =>
+            //{
+            //    options.BaseAddress = new Uri(configuration.GetSection("CatalogoUrl").Value);
+            //})
+            //.AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>()
+            //.AddTypedClient(Refit.RestService.For<ICatalogoServiceRefit>);
 
 
             //recomendação da microsoft que use (AddSingleton)
