@@ -1,4 +1,33 @@
-﻿//using System;
+﻿
+using NSE.Core.Messages;
+using System;
+
+namespace NSE.Clientes.API.Application.Commands
+{
+    //vai representar o transporte de dados de um cliente até a sua persistencia no base de dados.
+    public class RegistrarClienteCommand : Command
+    {
+        public Guid Id { get; private set; }
+
+        public string Nome { get; private set; }
+
+        public string Email { get; private set; }
+
+        public string Cpf { get; private set; }
+
+        public RegistrarClienteCommand(Guid id, string nome, string email, string cpf)
+        {
+            AggregateId = id;//aqui eu passe o  (AggregateId) recebendo o mesmo id. Devido eu esta utilizando como herança a (classe Message).
+            Id = id;
+            Nome = nome;
+            Email = email;
+            Cpf = cpf;
+        }
+    }
+}
+
+
+//using System;
 //using FluentValidation;
 //using NSE.Core.Messages;
 
