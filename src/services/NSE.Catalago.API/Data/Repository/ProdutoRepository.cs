@@ -19,6 +19,9 @@ namespace NSE.Catalago.API.Data.Repository
         }
         public IUnitOfWork IUnitOfWork => _context;
 
+        //COLOQUEI MAS PRECISO REAVALIAR
+        public IUnitOfWork UnitOfWork => throw new NotImplementedException();
+
         public async Task<IEnumerable<Produto>> ObterTodos()
         {
             return await _context.Produtos.AsNoTracking().ToListAsync();

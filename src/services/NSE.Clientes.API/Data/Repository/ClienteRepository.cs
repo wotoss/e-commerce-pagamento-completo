@@ -15,6 +15,7 @@ namespace NSE.Clientes.API.Data.Repository
             _context = context;
         }
 
+        //a persistencia ou o save ficará por conta do (IUnitOfWork)
         public IUnitOfWork UnitOfWork => _context;
 
         public async Task<IEnumerable<Cliente>> ObterTodos()
@@ -22,9 +23,9 @@ namespace NSE.Clientes.API.Data.Repository
             return await _context.Clientes.AsNoTracking().ToListAsync();
         }
 
-        public Task<Cliente> ObterPorCpf(string cpf)
+        public  Task<Cliente> ObterPorCpf(string cpf)
         {
-            return _context.Clientes.FirstOrDefaultAsync(c => c.Cpf.Numero == cpf);
+            return  _context.Clientes.FirstOrDefaultAsync(c => c.Cpf.Numero == cpf);
         }
 
         public void Adicionar(Cliente cliente)

@@ -1,4 +1,5 @@
 ﻿
+using FluentValidation;
 using NSE.Core.Messages;
 using System;
 
@@ -23,9 +24,55 @@ namespace NSE.Clientes.API.Application.Commands
             Email = email;
             Cpf = cpf;
         }
+
+        //vamos sobrescrever o método EhValido. Lembrando que ele foi criado como virtual, tem que sobescrever
+        public override bool EhValido()
+        {
+            //vai receber a instancia new RegistrarClienteValidation Validando (Validate => (o proprio cliente => (this)
+            ValidationResult = new RegistrarClienteValidation().Validate(this);
+            return ValidationResult.IsValid;
+        }
+
+        //ESTA CLASSE ESTA COMO UM A CLASSE ANINHADA UMA CLASSE(RegistrarClienteCommand) DENTRO DE OUTRA. (RegistrarClienteValidation).
+
+
+        //Aqui estou dizendo que vou construir as minhas regras de validação baseado no (AbstractValidator)
+        public class RegistrarClienteValidation : AbstractValidator<RegistrarClienteCommand>
+        {
+            public RegistrarClienteValidation()
+            {
+                //estou fazendo a regra de todo a minha classe (RegistrarClienteCommand) usando como biblioteca FluentValidation.AbstractValidator
+                RuleFor(c => c.Id)
+                    .NotEqual(Guid.Empty)//estou colocando em minha regra que o Id não pode ser vázio.
+                    .WithMessage("Id do cliente inválido");
+
+                RuleFor(c => c.Nome)
+                    .NotEmpty() //Não pode estar vazio
+                    .WithMessage("O nome do cliente não foi informado");
+
+                RuleFor(c => c.Cpf)
+                    .Must(TerCpfValido)
+                    .WithMessage("O cpf informado não é válido.");
+
+                RuleFor(c => c.Email)
+                    .Must(TerEmailValido)
+                    .WithMessage("O e-mail informado não é válido.");
+            }
+
+            protected static bool TerCpfValido(string cpf)
+            {
+                return Core.DomainObjects.Cpf.Validar(cpf);
+            }
+
+            protected static bool TerEmailValido(string email)
+            {
+                //estou percorrendo o caminho (Core.DomainObjects) até chegar na classe Email e trazer o método Validar(cpf)
+                //faço isto com o método de acesso (.)
+                return Core.DomainObjects.Email.Validar(email);
+            }
+        }
     }
 }
-
 
 //using System;
 //using FluentValidation;

@@ -1,4 +1,6 @@
 ﻿using FluentValidation.Results;
+using NSE.Core.Data;
+using System.Threading.Tasks;
 
 namespace NSE.Core.Mediator
 {
@@ -18,6 +20,17 @@ namespace NSE.Core.Mediator
         protected void AdicionarErro(string mensagem)
         {
             ValidationResult.Errors.Add(new ValidationFailure(string.Empty, mensagem));
+        }
+
+
+        //fiz um método PersistirDados (com a minha interface => IUnitOfWork, desta forma eu trago o metodo Commit )
+        //e digo se for diferente da implementação base  AdiconeErro que seria para adicionar a mensagem.
+        //Caso não der o commit enviará a mensagem de erro.
+        protected async Task<ValidationResult> PersistirDados(IUnitOfWork uow)
+        {
+            if (!await uow.Commit()) AdicionarErro("Houve um erro ao persistir os dados");
+
+            return ValidationResult;
         }
     }
 }
