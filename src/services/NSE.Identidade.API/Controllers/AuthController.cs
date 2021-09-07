@@ -5,14 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static NSE.Identidade.API.Models.UserViewModels;
-
-using NSE.Identidade.API.Extensions;
 using Microsoft.Extensions.Options;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Collections.Generic;
 using NSE.WebAPI.Core.Identidade;
+using NSE.WebAPI.Core.Controllers;
 
 namespace NSE.Identidade.API.Controllers
 {

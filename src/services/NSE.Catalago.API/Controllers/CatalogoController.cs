@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NSE.Catalago.API.Models;
+using NSE.WebAPI.Core.Controllers;
 using NSE.WebAPI.Core.Identidade;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace NSE.Catalago.API.Controllers
 {
-        [ApiController]
+        
         [Authorize] //vou trancar minha controller com ([Authorize] )
         //para acessar a minha controler e os metodos, você tem que estar autorizado.
-         public class CatalogoController : Controller
+         public class CatalogoController : MainController
           {
             private readonly IProdutoRepository _produtoRepository;
 

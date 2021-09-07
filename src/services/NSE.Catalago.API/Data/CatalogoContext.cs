@@ -1,8 +1,10 @@
 ﻿
 
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using NSE.Catalago.API.Models;
 using NSE.Core.Data;
+using NSE.Core.Messages;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,6 +20,11 @@ namespace NSE.Catalago.API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //vou pedir para ignorar o ValidationResult && Event
+            //peço para ignorar estas propriedade pois não são para ser persistida na base de dados.
+            modelBuilder.Ignore<ValidationResult>();
+            modelBuilder.Ignore<Event>();
+
             //Como boa pratica eu dou este foreach no mapeamento CASO eu escqueça algum campo Mapping ele fará com varcha(100)
             //Isto para evitar o (nvarchar). que seria o default
             foreach (var property in modelBuilder.Model.GetEntityTypes().SelectMany(
