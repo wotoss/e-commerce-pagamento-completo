@@ -6,6 +6,7 @@ using NSE.Clientes.API.Application.Events;
 using NSE.Clientes.API.Data;
 using NSE.Clientes.API.Data.Repository;
 using NSE.Clientes.API.Models;
+using NSE.Clientes.API.Services;
 using NSE.Core.Mediator;
 
 namespace NSE.Clientes.API.Configuration
@@ -21,6 +22,10 @@ namespace NSE.Clientes.API.Configuration
 
             services.AddScoped<IClienteRepository, ClienteRepository>();
             services.AddScoped<ClientesContext>();
+
+            //Detalhe como ele é um seviço  hospedado ele tem que trabalhar no modelo Singleton
+            //=> Ele não pode trabalhar por (request) com Scoped que seria o padrão do sistema
+            services.AddHostedService<RegistroClienteIntegrationHandler>();
         }
     }
 }

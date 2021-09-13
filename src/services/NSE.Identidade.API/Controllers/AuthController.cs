@@ -12,6 +12,8 @@ using System.Linq;
 using System.Collections.Generic;
 using NSE.WebAPI.Core.Identidade;
 using NSE.WebAPI.Core.Controllers;
+using NSE.Core.Messages.Integration;
+using EasyNetQ;
 
 namespace NSE.Identidade.API.Controllers
 {
@@ -24,6 +26,7 @@ namespace NSE.Identidade.API.Controllers
         private readonly SignInManager<IdentityUser> _signInManager; //irá gerenciar o login =>  "SignInManager"
         private readonly UserManager<IdentityUser> _userManager; //irá gerenciar o Usuario =>  "UserManager"
         private readonly AppSettings _appSettings;
+        private IBus _bus;
 
         public AuthController(SignInManager<IdentityUser> signInManager, 
                               UserManager<IdentityUser> userManager,
@@ -55,6 +58,11 @@ namespace NSE.Identidade.API.Controllers
             //se tudo deu certo ele fica neste if => não vai para linha de baixo
             if (result.Succeeded)
             {
+                //AQUI ESTA SENDO IMPLEMENTADO O REQUEST => LÁ NA API.CLIENTE IMPLEMENTAREMOS O RESPONSE.
+                //aqui estou enviando a mensagem par processa mento do cliente => e teremos um retorno da API.Cliente
+                //integração =>  Vou receber aqui o método => RegistrarCliente com o (usuarioRegistro) passado
+                var sucesso = await RegistrarCliente(usuarioRegistro);
+
                 //esta gerando do token com o => metodo (GerarJwt)
                 return CustomResponse(await GerarJwt(usuarioRegistro.Email)); //este retorno Ok seria um (200)
             }
@@ -68,6 +76,24 @@ namespace NSE.Identidade.API.Controllers
             }
             return CustomResponse(); //caso de erro retorno um (CustomResponse) => requsição não execultada com sucesso
         }
+
+        //este método responde o (ResponseMessage), nos fazemos o request e passamos a resposta aqui
+        private async Task<ResponseMessage> RegistrarCliente(UsuarioRegistro usuarioRegistro)
+        {
+            //vou buscar ou obter o meu usuario do banco através do email
+            var usuario = await _userManager.FindByEmailAsync(usuarioRegistro.Email);
+
+            var usuarioRegistrado = new UsuarioRegistradoIntegrationEvent(
+                Guid.Parse(usuario.Id), usuarioRegistro.Nome, usuarioRegistro.Email, usuarioRegistro.Cpf);
+
+            //aqui eu tenho um bus criado => estou passando a ConnectionString => do meu Rabbitmq  (host=localhost:5672) está configurado no docker
+            _bus = RabbitHutch.CreateBus("host=localhost:5672");
+
+            //este => UsuarioRegistradoIntegrationEvent é o tipo de dado que estou passando => e a resposta que eu quero é => ResponseMessage => e o dado que vou passar => usuarioRegistrado
+            var sucesso = await _bus.Rpc.RequestAsync<UsuarioRegistradoIntegrationEvent, ResponseMessage>(usuarioRegistrado);
+            return sucesso;
+        }       
+
 
         [HttpPost("autenticar")] //seria o login
         public async Task<ActionResult> Login(UsuarioLogin usuarioLogin)
